@@ -21,7 +21,7 @@ if !exists('g:rg_root_types')
 endif
 
 if !exists('g:rg_window_location')
-  let g:rg_window_location = 'botright'
+  let g:rg_window_location = 'rightb'
 endif
 
 fun! g:RgVisual() range
@@ -61,16 +61,17 @@ fun! s:RgSearch(txt)
   if &smartcase == 1
     let l:rgopts = l:rgopts . '-S '
   endif
-  silent! exe 'grep! ' . l:rgopts . a:txt
-  if len(getqflist())
-    exe g:rg_window_location 'copen'
-    redraw!
+  lclose
+  silent! exe 'lgrep! ' . l:rgopts . a:txt
+  if len(getloclist(0))
+    exe g:rg_window_location 'lwindow'
+    "redraw!
     if exists('g:rg_highlight')
       call s:RgHighlight(a:txt)
     endif
   else
-    cclose
-    redraw!
+    lclose
+    "redraw!
     echo "No match found for " . a:txt
   endif
 endfun
